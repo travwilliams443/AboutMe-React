@@ -1,0 +1,23 @@
+.item + .item {
+  margin-top: 1.5rem;
+}
+
+.degree {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.institution {
+  display: block;
+  font-weight: 400;
+  color: #666;
+  font-size: 0.95rem;
+  margin-top: 0.25rem;
+}
+
+.dates {
+  margin: 0.5rem 0 0;
+  font-size: 0.875rem;
+  color: #666;
+}

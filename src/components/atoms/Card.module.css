@@ -1,0 +1,31 @@
+
+.card {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border-radius: 0.5rem;
+  padding: 1rem;
+
+  /* ✨ Add a smooth transition for all the things we’ll tweak on hover */
+  transition: 
+    background 0.2s ease-in-out,
+    box-shadow 0.2s ease-in-out,
+    transform 0.2s ease-in-out;
+}
+
+/* Hover state */
+.card:hover {
+  /* a bit more opaque so it “fills in” */
+  background: rgba(255, 255, 255, 0.25);
+
+  /* soft drop shadow to lift it off the page */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+
+  /* tiny lift for a material‑like effect */
+  transform: translateY(-3px);
+}
+
+/* heading styling stays the same */
+.heading {
+  margin: 0 0 0.5rem;
+  font-size: 1.25rem;
+}

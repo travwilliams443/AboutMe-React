@@ -1,0 +1,10 @@
+/* src/layouts/MainContent.module.css */
+.main {
+  background: none;
+  color: #333;           /* ← add this */
+  padding: 2rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;    /* ← adds 2rem between each Card */
+}

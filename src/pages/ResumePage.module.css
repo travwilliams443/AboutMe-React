@@ -1,0 +1,36 @@
+/* src/pages/ResumePage.module.css */
+
+.container {
+  /* layout */
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  width: 100vw;        /* fill viewport width */
+  min-height: 100vh;   /* fill viewport height */
+  margin: 0;
+  padding: 0;
+
+  /* combined background: 
+     1) gradient  
+     2) vertical grid lines  
+     3) horizontal grid lines */
+  background-image: 
+    linear-gradient(135deg, #6cace4 0%, #c41cf2 100%),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 49px,
+      rgba(255, 255, 255, 0.1) 50px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 49px,
+      rgba(255, 255, 255, 0.1) 50px
+    );
+
+  /* 
+    first layer (gradient) covers the full area,
+    the next two layers repeat at 50px×50px
+  */
+  background-size: cover, 50px 50px, 50px 50px;
+}
