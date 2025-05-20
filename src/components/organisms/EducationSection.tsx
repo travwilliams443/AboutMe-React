@@ -7,18 +7,17 @@ export default function EducationSection() {
     <Card title="Education">
       <article className={styles.item}>
         <h3 className={styles.degree}>
-          Bachelor of Engineering in Information Technology<br/>
-          <span className={styles.institution}>SCAT Education Campus</span>
+          Associate of Applied Science in Mechatronics (Expected Dec 2026)<br />
+          <span className={styles.institution}>Gwinnett Technical College</span>
         </h3>
-        <p className={styles.dates}>2011 – 2015, New York</p>
+        <p className={styles.dates}>Lawrenceville, GA</p>
       </article>
-
       <article className={styles.item}>
         <h3 className={styles.degree}>
-          NJIT Higher<br/>
-          <span className={styles.institution}>AB Experiment Campus</span>
+          Bachelor of Science in Mathematics<br />
+          <span className={styles.institution}>University of South Carolina</span>
         </h3>
-        <p className={styles.dates}>2009 – 2011, New York</p>
+        <p className={styles.dates}>Columbia, SC</p>
       </article>
     </Card>
   )
