@@ -1,6 +1,6 @@
 
 .card {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.432);
   backdrop-filter: blur(10px);
   border-radius: 0.5rem;
   padding: 1rem;
@@ -15,7 +15,7 @@
 /* Hover state */
 .card:hover {
   /* a bit more opaque so it “fills in” */
-  background: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.521);
 
   /* soft drop shadow to lift it off the page */
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);

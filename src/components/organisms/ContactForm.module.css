@@ -34,7 +34,7 @@
 .label {
   font-size: 0.9rem;
   font-weight: 600;
-  color: #333;
+  color: #000000;
   margin-bottom: 0.25rem;
 }
 
@@ -91,7 +91,7 @@
 .label {
   font-size: 0.875rem;
   font-weight: 500;
-  color: #333;
+  color: #000000;
 }
 .error {
   color: #e53e3e;
