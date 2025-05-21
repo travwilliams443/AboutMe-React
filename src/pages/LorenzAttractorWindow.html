@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lorenz Attractor Demo</title>
+  <style>
+    body { margin: 0; overflow: hidden; font-family: sans-serif; }
+    #ui { position: absolute; top: 10px; left: 10px; background: rgba(255,255,255,0.8); padding: 8px; border-radius: 4px; }
+    #ui label { display: block; margin-bottom: 4px; }
+    #play { margin-right: 8px; }
+  </style>
+  <script type="importmap">
+  {
+    "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.module.js" }
+  }
+  </script>
+</head>
+<body>
+  <div id="ui">
+    <button id="play">Play</button>
+    <label>Speed: <input id="speed" type="range" min="0.1" max="5" step="0.1" value="1"></label>
+    <label>Mode:
+      <select id="mode">
+        <option value="line">Path</option>
+        <option value="points">Points</option>
+        <option value="spheres">Spheres</option>
+      </select>
+    </label>
+  </div>
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/jsm/controls/OrbitControls.js';
+
+    // HSL to RGB
+    function hslToRgb(h, s, l) {
+      let r, g, b;
+      if (s === 0) r = g = b = l;
+      else {
+        const hue2rgb = (p, q, t) => { t = (t+1)%1; if (t < 1/6) return p + (q-p)*6*t; if (t<1/2) return q; if (t<2/3) return p + (q-p)*(2/3-t)*6; return p; };
+        const q = l<0.5 ? l*(1+s) : l+s-l*s;
+        const p = 2*l - q;
+        r = hue2rgb(p, q, h+1/3);
+        g = hue2rgb(p, q, h);
+        b = hue2rgb(p, q, h-1/3);
+      }
+      return [r, g, b];
+    }
+
+    // Lorenz parameters
+    const sigma = 10, rho = 28, beta = 8/3;
+    let x=0.1, y=0, z=0;
+
+    // Ring buffer data
+    const maxPoints = 50000;
+    const points = new Array(maxPoints);
+    let head = -1, count = 0, hueOffset = 0;
+
+    // Three.js setup
+    const scene = new THREE.Scene();
+    scene.add(new THREE.AmbientLight(0x666666));
+    const dir = new THREE.DirectionalLight(0xffffff, 0.5);
+    dir.position.set(10,10,10);
+    scene.add(dir);
+
+    const camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.0001, 10000);
+    camera.position.set(0,20,50);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.minDistance = 1;
+    controls.maxDistance = 1000;
+    controls.enableDamping = true;
+
+    // Shared buffer for path and points
+    const positions = new Float32Array(maxPoints*3);
+    const colors = new Float32Array(maxPoints*3);
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions,3));
+    geometry.setAttribute('color',    new THREE.BufferAttribute(colors,3));
+    geometry.setDrawRange(0,0);
+
+    const lineMesh = new THREE.Line(geometry,  new THREE.LineBasicMaterial({ vertexColors: true }));
+    const pointsMesh = new THREE.Points(geometry, new THREE.PointsMaterial({ size: 0.05, vertexColors: true }));
+    scene.add(lineMesh, pointsMesh);
+
+    // Instanced spheres
+    const sphereGeom = new THREE.SphereBufferGeometry(0.15,12,8);
+    const sphereMat  = new THREE.MeshPhongMaterial({ color: 0xffffff });
+    const spheresMesh = new THREE.InstancedMesh(sphereGeom, sphereMat, maxPoints);
+    spheresMesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+    scene.add(spheresMesh);
+
+    // Visibility toggle
+    lineMesh.visible = true;
+    pointsMesh.visible = false;
+    spheresMesh.visible = false;
+
+    document.getElementById('mode').addEventListener('change', e => {
+      const m = e.target.value;
+      lineMesh.visible = (m==='line');
+      pointsMesh.visible = (m==='points');
+      spheresMesh.visible = (m==='spheres');
+    });
+
+    let playing = false;
+    document.getElementById('play').addEventListener('click', ()=>{
+      playing = !playing;
+      document.getElementById('play').textContent = playing?'Pause':'Play';
+    });
+    const speedSlider = document.getElementById('speed');
+
+    // Euler integrator
+    function step(dt) {
+      const dx = sigma*(y-x)*dt;
+      const dy = (x*(rho-z)-y)*dt;
+      const dz = (x*y-beta*z)*dt;
+      x += dx; y += dy; z += dz;
+      head = (head+1) % maxPoints;
+      points[head] = {x,y,z};
+      if (count < maxPoints) count++;
+    }
+
+    // Animation loop
+    function animate() {
+      requestAnimationFrame(animate);
+      if (playing) {
+        const dt = 0.005 * parseFloat(speedSlider.value);
+        for (let i=0;i<5;i++) step(dt);
+        const N = count;
+        geometry.setDrawRange(0,N);
+        hueOffset = (hueOffset + 0.0005) % 1;
+
+        const start = (head - count + 1 + maxPoints)%maxPoints;
+        for (let i=0;i<N;i++) {
+          const idx = (start + i) % maxPoints;
+          const p   = points[idx];
+          const pi  = 3*i;
+          // path & points
+          positions[pi]   = p.x;
+          positions[pi+1] = p.y;
+          positions[pi+2] = p.z;
+          const age = i/N;
+          const hue = (0.6*(1-age) + hueOffset)%1;
+          const [r,g,b] = hslToRgb(hue,1,0.5);
+          colors[pi]   = r;
+          colors[pi+1] = g;
+          colors[pi+2] = b;
+          // spheres
+          if (spheresMesh.visible) {
+            // compute dynamic scale: smaller for older (near center), larger for newer
+            const scaleFactor = 0.05 + 0.15 * (i / N);  // ranges 0.05→0.20
+            const posVec = new THREE.Vector3(p.x, p.y, p.z);
+            const quat = new THREE.Quaternion();
+            const scaleVec = new THREE.Vector3(scaleFactor, scaleFactor, scaleFactor);
+            const instMat = new THREE.Matrix4();
+            instMat.compose(posVec, quat, scaleVec);
+            spheresMesh.setMatrixAt(i, instMat);
+          }
+        }
+        geometry.attributes.position.needsUpdate = true;
+        geometry.attributes.color.needsUpdate    = true;
+        if (spheresMesh.visible) spheresMesh.instanceMatrix.needsUpdate = true;
+      }
+      controls.update();
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    window.addEventListener('resize',()=>{
+      camera.aspect = window.innerWidth/window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth,window.innerHeight);
+    });
+  </script>
+</body>
+</html>

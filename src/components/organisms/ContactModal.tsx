@@ -1,6 +1,6 @@
 import React, { ReactNode, useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import styles from './Modal.module.css';
+import styles from './ContactModal.module.css';
 
 interface ModalProps {
     isOpen: boolean;
@@ -8,7 +8,7 @@ interface ModalProps {
     children: ReactNode;
 }
 
-export default function Modal({ isOpen, onClose, children }: ModalProps) {
+export default function ContactModal({ isOpen, onClose, children }: ModalProps) {
     // lock background scroll when open
     useEffect(() => {
         document.body.style.overflow = isOpen ? 'hidden' : '';

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Card from '../atoms/Card';
 import ContactForm from './ContactForm';
-import Modal from './Modal';
+import ContactModal from './ContactModal';
 import styles from './ContactCard.module.css';
 
 export default function ContactCard() {
@@ -34,9 +34,9 @@ export default function ContactCard() {
       </Card>
 
       {/* Portal‑based modal pops above entire page */}
-      <Modal isOpen={open} onClose={() => setOpen(false)}>
+      <ContactModal isOpen={open} onClose={() => setOpen(false)}>
         <ContactForm />
-      </Modal>
+      </ContactModal>
     </>
   );
 }
