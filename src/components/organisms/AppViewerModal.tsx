@@ -31,7 +31,9 @@ export default function AppViewerModal({ isOpen, onClose, title, children }: Mod
                 <h3 className={styles.header}>{title}</h3>
                 <div className={styles.divider} />
                 {/* Modal content */}
-                {children}
+                <div className={styles.modalContent}>
+                    {children}
+                </div>
             </div>
         </div>,
         document.body
