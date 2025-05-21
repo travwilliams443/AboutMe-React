@@ -16,7 +16,7 @@
   padding: 2rem 1.5rem;
   max-width: 480px;
   width: 96vw;                  /* more mobile-friendly */
-  max-height: 96vh;             /* ensures modal fits on screen */
+  max-height: 96dvh;             /* ensures modal fits on screen */
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
   overflow: hidden;             /* clip content if needed */
   display: flex;
@@ -26,7 +26,7 @@
 .modalContent {
   flex: 1;
   overflow-y: auto;
-  padding-bottom: 1rem;
+  padding: 24px 16px 40px 16px; /* 40px bottom padding for home buttons */
 }
 
 
@@ -56,10 +56,12 @@
   font-size: 1.5rem;
   line-height: 1;
   cursor: pointer;
-  background: transparent;
+  background: rgba(255,255,255,0.95);
   border: none;
+  border-radius: 50%;
   color: #555;
   transition: color 0.2s;
+  z-index: 100;
 }
 
 .closeBtn:hover {
