@@ -3,6 +3,7 @@ import React, { useRef, useState, useEffect, useMemo } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
+import styles from "./AppViewerModal.module.css";
 
 interface LorenzTubeProps {
   speed: number;
@@ -104,6 +105,7 @@ export default function LorenzAttractor() {
       >
         <button onClick={() => setPlaying((p) => !p)} 
           title="Start or stop the simulation" 
+          className={styles.button}
           >
           {playing ? "Pause" : "Play"}          
         </button>
@@ -111,6 +113,7 @@ export default function LorenzAttractor() {
         <button
           onClick={() => setResetTrigger((t) => t + 1)}          
           title="Reset the simulation"
+          className={styles.button}
         >
           Reset
         </button>

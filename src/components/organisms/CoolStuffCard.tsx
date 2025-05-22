@@ -27,7 +27,7 @@ export default function CoolStuffCard() {
       <AppViewerModal
         isOpen={openLorenzR3F}
         onClose={() => setOpenLorenzR3F(false)}
-        title="Lorenz Attractor (React Three Fiber)"
+        title="Lorenz Attractor"
       >
         <LorenzAttractor />
       </AppViewerModal>
