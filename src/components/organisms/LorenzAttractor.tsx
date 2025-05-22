@@ -1,15 +1,26 @@
 // LorenzAttractorR3F.tsx
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useMemo } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
 
-function LorenzLine({ speed, playing, resetTrigger }: { speed: number; playing: boolean; resetTrigger: number }) {
-  const pointsRef = useRef(new Float32Array(10000 * 3));
-  const geometryRef = useRef<THREE.BufferGeometry>(null!);
+interface LorenzTubeProps {
+  speed: number;
+  playing: boolean;
+  resetTrigger: number;
+}
 
-  // Lorenz attractor state stored in a ref
-  const state = useRef({
+function LorenzTube({ speed, playing, resetTrigger }: LorenzTubeProps) {
+  const state = useRef<{
+    sigma: number;
+    rho: number;
+    beta: number;
+    x: number;
+    y: number;
+    z: number;
+    maxPoints: number;
+    points: THREE.Vector3[];
+  }>({
     sigma: 10,
     rho: 28,
     beta: 8 / 3,
@@ -17,25 +28,20 @@ function LorenzLine({ speed, playing, resetTrigger }: { speed: number; playing: 
     y: 0,
     z: 0,
     maxPoints: 10000,
-    head: 0,
-    count: 1,
+    points: [],
   });
-
-  // Reset simulation when resetTrigger changes
+  // Reset points on resetTrigger
   useEffect(() => {
-    const sim = state.current;
-    sim.x = 0.1;
-    sim.y = 0;
-    sim.z = 0;
-    sim.head = 0;
-    sim.count = 1;
-    pointsRef.current.fill(0);
-    if (geometryRef.current) {
-      geometryRef.current.setDrawRange(0, 1);
-      geometryRef.current.attributes.position.needsUpdate = true;
-    }
+    state.current.x = 0.1;
+    state.current.y = 0;
+    state.current.z = 0;
+    state.current.points = [new THREE.Vector3(0.1, 0, 0)];
   }, [resetTrigger]);
 
+  // Store the tube geometry in a ref
+  const tubeRef = useRef<THREE.Mesh>(null);
+
+  // Update simulation & points each frame
   useFrame(() => {
     if (!playing) return;
 
@@ -51,35 +57,32 @@ function LorenzLine({ speed, playing, resetTrigger }: { speed: number; playing: 
       sim.y += dy;
       sim.z += dz;
 
-      if (sim.count < sim.maxPoints) sim.count++;
-      sim.head = (sim.head + 1) % sim.maxPoints;
-
-      pointsRef.current[sim.head * 3 + 0] = sim.x;
-      pointsRef.current[sim.head * 3 + 1] = sim.y;
-      pointsRef.current[sim.head * 3 + 2] = sim.z;
+      sim.points.push(new THREE.Vector3(sim.x, sim.y, sim.z));
+      if (sim.points.length > sim.maxPoints) {
+        sim.points.shift(); // keep maxPoints length
+      }
     }
 
-    if (geometryRef.current) {
-      // Update geometry draw range and position attribute
-      geometryRef.current.setDrawRange(0, state.current.count);
-      geometryRef.current.attributes.position.needsUpdate = true;
+    if (tubeRef.current) {
+      const curve = new THREE.CatmullRomCurve3(state.current.points);
+      const newGeometry = new THREE.TubeGeometry(curve, state.current.points.length * 2, 0.1, 8, false);
+
+      tubeRef.current.geometry.dispose();  // dispose old geometry to avoid memory leaks
+      tubeRef.current.geometry = newGeometry;
     }
   });
 
-  // Initialize buffer geometry once
   return (
-    <line>
-      <bufferGeometry
-        ref={geometryRef}
-        attach="geometry"
-        onUpdate={(self) => {
-          self.setAttribute("position", new THREE.BufferAttribute(pointsRef.current, 3));
-          self.setDrawRange(0, 1);
-        }}
-      />
-      <lineBasicMaterial color={0x5cb7ff} />
-    </line>
-  );
+  <mesh ref={tubeRef} castShadow receiveShadow>
+    <meshPhysicalMaterial
+      color="#5cb7ff"
+      metalness={0.7}
+      roughness={0.2}
+      clearcoat={1}
+      clearcoatRoughness={0.1}
+    />
+  </mesh>
+);
 }
 
 export default function LorenzAttractor() {
@@ -139,14 +142,21 @@ export default function LorenzAttractor() {
         style={{
           width: "100%",
           height: 320,
-          background: "#222",
+          background: "#000",
           borderRadius: 8,
           overflow: "hidden",
         }}
         camera={{ position: [0, 0, 100], fov: 60, near: 0.01, far: 1000 }}
       >
-        <ambientLight intensity={0.6} />
-        <LorenzLine speed={speed} playing={playing} resetTrigger={resetTrigger} />
+        <ambientLight intensity={1} />
+        <directionalLight
+          position={[5, 10, 7]}
+          intensity={3}
+          castShadow
+          shadow-mapSize-width={1024}
+          shadow-mapSize-height={1024}
+        />
+        <LorenzTube speed={speed} playing={playing} resetTrigger={resetTrigger} />
         <OrbitControls
           enableDamping
           dampingFactor={0.1}
