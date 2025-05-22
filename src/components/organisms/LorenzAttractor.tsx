@@ -102,13 +102,14 @@ export default function LorenzAttractor() {
           flexWrap: "wrap",
         }}
       >
-        <button onClick={() => setPlaying((p) => !p)} style={{ fontWeight: 600, minWidth: 70 }}>
-          {playing ? "Pause" : "Play"}
+        <button onClick={() => setPlaying((p) => !p)} 
+          title="Start or stop the simulation" 
+          >
+          {playing ? "Pause" : "Play"}          
         </button>
 
         <button
-          onClick={() => setResetTrigger((t) => t + 1)}
-          style={{ fontWeight: 600, minWidth: 70 }}
+          onClick={() => setResetTrigger((t) => t + 1)}          
           title="Reset the simulation"
         >
           Reset
