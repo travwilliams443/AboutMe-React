@@ -2,6 +2,12 @@
   padding: 2rem;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 2rem;
   color: #000000;
 } 
+
+@media (max-width: 767px) {
+  .sidebar {
+    padding-bottom: 1rem;
+  }
+}

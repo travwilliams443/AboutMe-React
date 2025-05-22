@@ -8,3 +8,9 @@
   flex-direction: column;
   gap: 2rem;    /* ← adds 2rem between each Card */
 }
+
+@media (max-width: 767px) {
+  .main {
+    padding-top: 1rem;
+  }
+}
