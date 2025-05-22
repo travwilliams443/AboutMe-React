@@ -149,10 +149,10 @@ export default function LorenzAttractor() {
         }}
         camera={{ position: [0, 0, 100], fov: 60, near: 0.01, far: 1000 }}
       >
-        <ambientLight intensity={1} />
+        <ambientLight intensity={2} />
         <directionalLight
           position={[5, 10, 7]}
-          intensity={3}
+          intensity={4}
           castShadow
           shadow-mapSize-width={1024}
           shadow-mapSize-height={1024}
