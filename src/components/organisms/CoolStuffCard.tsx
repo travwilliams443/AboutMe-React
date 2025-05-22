@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
-import Card from '../atoms/Card';
-import LorenzAttractorViewer from './LorenzAttractorViewer';
-import AppViewerModal from './AppViewerModal';
-import styles from './CoolStuffCard.module.css';
+import React, { useState } from "react";
+import Card from "../atoms/Card";
+import LorenzAttractor from "./LorenzAttractor"; // import your new R3F version
+import AppViewerModal from "./AppViewerModal";
+import styles from "./CoolStuffCard.module.css";
 
 export default function CoolStuffCard() {
-  const [open, setOpen] = useState(false);
+  const [openOld, setOpenOld] = useState(false);
+  const [openLorenzR3F, setOpenLorenzR3F] = useState(false);
 
   return (
     <>
@@ -13,18 +14,22 @@ export default function CoolStuffCard() {
         <ul className={styles.list}>
           <li>
             <button
-              onClick={() => setOpen(true)}
-              className={styles.sendButton}            >
+              onClick={() => setOpenLorenzR3F(true)}
+              className={styles.sendButton}
+            >
               Lorenz Attractor
             </button>
           </li>
         </ul>
       </Card>
 
-      {/* Portal‑based modal pops above entire page */}
-      <AppViewerModal isOpen={open} 
-          onClose={() => setOpen(false)} title="Lorenz Attractor">
-        <LorenzAttractorViewer />
+      {/* Modal for React Three Fiber Lorenz attractor */}
+      <AppViewerModal
+        isOpen={openLorenzR3F}
+        onClose={() => setOpenLorenzR3F(false)}
+        title="Lorenz Attractor (React Three Fiber)"
+      >
+        <LorenzAttractor />
       </AppViewerModal>
     </>
   );
