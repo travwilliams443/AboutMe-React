@@ -44,7 +44,7 @@
 }
 
 
-.button {  
+button {  
   width: 100%;
   border-radius: 8px;
   border: 1px solid transparent;
@@ -57,8 +57,19 @@
   transition: border-color 0.25s;
 }
 
-.button:hover {
+button:hover {
   border-color: #646cff;   /* indigo-600 */
+}
+
+@media (prefers-color-scheme: light) {
+  button {
+    background-color: #5c6ac4; /* brand accent */
+    color: white;
+    border: none;
+  }
+  button:hover {
+    background-color: #4a58a8; /* darker accent */
+  }
 }
 
 .field {
