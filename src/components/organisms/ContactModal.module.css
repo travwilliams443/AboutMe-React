@@ -43,30 +43,27 @@
 
 .closeBtn {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
+  top: 0.5rem;
+  right: 0.5rem;
   font-size: 1.5rem;
   line-height: 1;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  background: transparent;
+  background: rgba(255,255,255,0.95);
   border: none;
+  border-radius: 50%;
   color: #555;
+  z-index: 100;
   transition: color 0.2s;
 }
 
 .closeBtn:hover {
   color: #000;
-}
-
-
-.closeBtn {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  font-size: 1.25rem;
-  cursor: pointer;
-  background: transparent;
-  border: none;
+  background-color: rgba(255,255,255,1);
 }
 
 .modalOpen {
@@ -90,6 +87,8 @@
   font-size: 1.5rem;
   font-weight: 600;
   color: #000000;
+  padding-right: 2.5rem; /* add enough space for the close button */
+  position: relative;
 }
 
 .divider {
