@@ -173,11 +173,12 @@ export default function MagneticField() {
             marginBottom: 10,
             display: "flex",
             flexWrap: "wrap",
-            gap: 0,
-            justifyContent: "space-around",
+            gap: 20,
+            justifyContent: "space-between", // 'space-around' or 'space-between' works
             color: "black",
-            padding: "0 10px",
+            padding: "0 0",
             flex: "none",
+            width: "100%",
           }}
         >
           <div>
@@ -211,7 +212,7 @@ export default function MagneticField() {
         >
           <Canvas
             style={{ pointerEvents: "auto", width: "100%", height: "100%" }}
-            camera={{ position: [0, 0.18, 0], up: [0, 0, 1], fov: 45 }}
+            camera={{ position: [0, 0.18, 0], up: [0, 0, 1], fov: 45, near: 0.01 }}
             onPointerMissed={() => {
               setHoveredField(null);
               setHoveredB(undefined);
@@ -245,23 +246,23 @@ export default function MagneticField() {
             <OrbitControls />
           </Canvas>
           {/* Tooltip for |B| */}
-          {hoveredField && hoveredB !== undefined && screenPos && (
+          {hoveredField && hoveredB !== undefined && (
             <div
               style={{
                 position: "absolute",
-                left: screenPos.left,
-                top: screenPos.top,
-                transform: "translate(-50%, -120%)",
-                background: "rgba(255,255,255,0.95)",
+                top: 12,
+                right: 16,
+                background: "#fff",
                 color: "#222",
-                borderRadius: 8,
-                padding: "6px 10px",
+                borderRadius: 4,
+                padding: "3px 10px",
                 fontSize: 15,
-                pointerEvents: "none",
-                border: "1px solid #bbb",
-                boxShadow: "0 2px 6px rgba(0,0,0,0.10)",
                 fontFamily: "monospace",
+                border: "1px solid #bbb",
+                boxShadow: "0 2px 6px rgba(0,0,0,0.07)",
+                pointerEvents: "none",
                 zIndex: 100,
+                whiteSpace: "nowrap"
               }}
             >
               |B| = {hoveredB.toExponential(3)} T

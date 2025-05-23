@@ -144,8 +144,6 @@ export default function LorenzAttractor() {
       {/* 3D Canvas */}
       <Canvas
         style={{
-          width: "100%",
-          height: 320,
           background: "#000",
           borderRadius: 8,
           overflow: "hidden",
@@ -178,7 +176,6 @@ export default function LorenzAttractor() {
           padding: "0 8px",
           lineHeight: 1.5,
           textAlign: "left",
-          maxWidth: 520,
         }}
       >
         This is the famous <strong>Lorenz Attractor</strong>, discovered in 1963 by Edward Lorenz.
