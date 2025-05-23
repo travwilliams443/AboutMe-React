@@ -74,16 +74,16 @@ function LorenzTube({ speed, playing, resetTrigger }: LorenzTubeProps) {
   });
 
   return (
-  <mesh ref={tubeRef} castShadow receiveShadow>
-    <meshPhysicalMaterial
-      color="#5cb7ff"
-      metalness={0.7}
-      roughness={0.2}
-      clearcoat={1}
-      clearcoatRoughness={0.1}
-    />
-  </mesh>
-);
+    <mesh ref={tubeRef} castShadow receiveShadow>
+      <meshPhysicalMaterial
+        color="#5cb7ff"
+        metalness={0.7}
+        roughness={0.2}
+        clearcoat={1}
+        clearcoatRoughness={0.1}
+      />
+    </mesh>
+  );
 }
 
 export default function LorenzAttractor() {
@@ -103,15 +103,15 @@ export default function LorenzAttractor() {
           flexWrap: "wrap",
         }}
       >
-        <button onClick={() => setPlaying((p) => !p)} 
-          title="Start or stop the simulation" 
+        <button onClick={() => setPlaying((p) => !p)}
+          title="Start or stop the simulation"
           className={styles.button}
-          >
-          {playing ? "Pause" : "Play"}          
+        >
+          {playing ? "Pause" : "Play"}
         </button>
 
         <button
-          onClick={() => setResetTrigger((t) => t + 1)}          
+          onClick={() => setResetTrigger((t) => t + 1)}
           title="Reset the simulation"
           className={styles.button}
         >
@@ -167,17 +167,7 @@ export default function LorenzAttractor() {
         />
       </Canvas>
 
-      {/* Description text below */}
-      <div
-        style={{
-          color: "#333",
-          fontSize: "1rem",
-          marginTop: 8,
-          padding: "0 8px",
-          lineHeight: 1.5,
-          textAlign: "left",
-        }}
-      >
+      <div className={styles.descriptionScroll} style={{ marginTop: 12 }}>
         This is the famous <strong>Lorenz Attractor</strong>, discovered in 1963 by Edward Lorenz.
         It represents a simplified model of atmospheric convection, much like a pot of water heated on a stove.
         With the advent of early computers, Lorenz was able to solve this system of differential equations at thousands of points, revealing the beautiful figure recreated above.

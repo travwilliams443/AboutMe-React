@@ -5,8 +5,8 @@ import { OrbitControls } from "@react-three/drei";
 import styles from "./AppViewerModal.module.css";
 
 const segments = 200;
-const gridExtent = 5; // -5cm to +5cm
-const gridSpacingCm = 0.5;
+const gridExtent = 8; // -5cm to +5cm
+const gridSpacingCm = 0.6;
 
 function CoilMesh({ coilRadiusM, coilLengthM, turns }: { coilRadiusM: number; coilLengthM: number; turns: number; }) {
   const points = useMemo(() => {
@@ -183,7 +183,7 @@ export default function MagneticField() {
         >
           <div>
             <label>Coil Length: {coilLengthCm} cm</label><br />
-            <input type="range" min="1" max="50" step="0.1" value={coilLengthCm} onChange={e => setCoilLengthCm(Number(e.target.value))} />
+            <input type="range" min="1" max="15" step="0.1" value={coilLengthCm} onChange={e => setCoilLengthCm(Number(e.target.value))} />
           </div>
           <div>
             <label>Coil Radius: {coilRadiusCm} cm</label><br />
@@ -268,47 +268,41 @@ export default function MagneticField() {
               |B| = {hoveredB.toExponential(3)} T
             </div>
           )}
+          <div
+            style={{
+              position: "absolute",
+              left: "50%",
+              bottom: 12,
+              transform: "translateX(-50%)",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              pointerEvents: "none",
+              width: 220,
+              zIndex: 20,
+            }}
+          >
+            <svg width="220" height="36" style={{ display: "block" }}>
+              <line x1="150" y1="18" x2="80" y2="18" stroke="#888" strokeWidth="5" strokeLinecap="round" />
+              <polygon points="80,8 50,18 80,28" fill="#888" />
+            </svg>
+            <span
+              style={{
+                color: "#888",
+                fontWeight: 400,
+                fontSize: 18,
+                letterSpacing: 3,
+                fontFamily: "sans-serif",
+                marginTop: 1
+              }}
+            >
+              CURRENT
+            </span>
+          </div>
         </div>
+      <div className={styles.descriptionScroll}>
+        <b>What you're seeing:</b> The magnetic field lines inside and outside a solenoid. Use the sliders above to change the coil length, radius, number of turns, and current. Hover over the arrows to see the field strength at different points.
       </div>
-      {/* Current arrow/label, outside of .modalContent */}
-      <div
-        style={{
-          position: "absolute",
-          left: "50%",
-          top: "79%",
-          transform: "translate(-50%, 0)",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          pointerEvents: "none",
-          width: 220,
-        }}
-      >
-        <svg width="220" height="36" style={{ display: "block" }}>
-          <line
-            x1="150" y1="18"
-            x2="80" y2="18"
-            stroke="#888"
-            strokeWidth="5"
-            strokeLinecap="round"
-          />
-          <polygon
-            points="80,8 50,18 80,28"
-            fill="#888"
-          />
-        </svg>
-        <span
-          style={{
-            color: "#888",
-            fontWeight: 400,
-            fontSize: 18,
-            letterSpacing: 3,
-            fontFamily: "sans-serif",
-            marginTop: 1
-          }}
-        >
-          CURRENT
-        </span>
       </div>
     </>
   );
