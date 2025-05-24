@@ -15,7 +15,7 @@ const minExtent = 3;
 const maxExtent = 14;
 
 const minSpacing = 0.15;
-const maxSpacing = 1.0;
+const maxSpacing = 2.0;
 
 function lerp(a: number, b: number, t: number) {
   return a + (b - a) * t;
