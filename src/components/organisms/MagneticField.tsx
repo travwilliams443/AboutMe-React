@@ -76,8 +76,7 @@ function CurrentArrow3D({ coilLengthM}: { coilLengthM: number }) {
           0.005, // headWidth
         ]}
       />
-      {/*<Billboard>*/}
-      <Text
+      {/*<Text
         position={[0.0, 0.02, -0.0035]}
         fontSize={0.006}
         fontWeight={"bold"}
@@ -87,8 +86,7 @@ function CurrentArrow3D({ coilLengthM}: { coilLengthM: number }) {
         rotation={[-Math.PI / 2, 0, Math.PI]}
       >
         CURRENT
-      </Text>         
-      {/*</Billboard>*/}
+      </Text>*/}
     </group>
   );
 }
