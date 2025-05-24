@@ -78,8 +78,9 @@ function CurrentArrow3D({ coilLengthM}: { coilLengthM: number }) {
       />
       {/*<Billboard>*/}
       <Text
-        position={[0.0, 0.008, -0.0035]}
-        fontSize={0.0055}
+        position={[0.0, 0.02, -0.0035]}
+        fontSize={0.006}
+        fontWeight={"bold"}
         color="white"
         anchorX="center"
         anchorY="middle" 
