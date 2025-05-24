@@ -1,13 +1,96 @@
 import React, { useMemo, useState, useRef } from "react";
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useThree, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
-import { OrbitControls } from "@react-three/drei";
+import { OrbitControls, Cylinder, Text, Billboard } from "@react-three/drei";
 import styles from "./AppViewerModal.module.css";
 
 const segments = 200;
-const gridExtent = 8; // -5cm to +5cm
-const gridSpacingCm = 0.6;
+//const gridExtent = 8; // -5cm to +5cm
+//const gridSpacingCm = 0.6;
 
+const minZoom = 0.04;
+const maxZoom = .3;
+
+const minExtent = 3;
+const maxExtent = 14;
+
+const minSpacing = 0.15;
+const maxSpacing = 1.0;
+
+function lerp(a: number, b: number, t: number) {
+  return a + (b - a) * t;
+}
+
+function CameraTracker({ setZoom }: { setZoom: (z: number) => void }) {
+  const { camera } = useThree();
+  const lastZoom = useRef<number | null>(null);
+
+  useFrame(() => {
+    // Example: Use camera.position.length() as a zoom proxy
+    const zoomLevel = camera.position.length();
+
+    if (lastZoom.current === null || Math.abs(zoomLevel - lastZoom.current) > 0.025) {
+      setZoom(zoomLevel); //Update zoom level
+      // Print when zoom changes (with some tolerance)
+      //console.log("Zoom level:", zoomLevel.toFixed(3));
+      lastZoom.current = zoomLevel;
+    }
+
+    // Normalize zoom value to [0, 1]
+    const t = (zoomLevel - minZoom) / (maxZoom - minZoom);
+    const clampT = Math.max(0, Math.min(1, t));
+
+  });
+
+  return null; // This component doesn't render anything visually
+}
+
+function CurrentArrow3D({ coilLengthM}: { coilLengthM: number }) {
+
+  const dir = new THREE.Vector3(1, 0, 0);
+
+  // Position the arrow shaft
+  const shaftMid = new THREE.Vector3(0, 0, 0);
+  const quaternion = new THREE.Quaternion();
+  quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), new THREE.Vector3(1, 0, 0)); // y-axis by default
+
+    // Arrow parameters: start at one end, point to the other, or wherever you want!
+  const headFrom = new THREE.Vector3(coilLengthM/2 + 0.004, 0, 0); // Tail (adjust as needed)
+  
+  return (
+    <group>
+      <Cylinder
+        args={[.0005, .0005, coilLengthM, 16]}
+        position={shaftMid.toArray()}
+        quaternion={quaternion}
+      >
+        <meshStandardMaterial color={"white"} />
+      </Cylinder>
+      <arrowHelper
+        args={[
+          dir,
+          headFrom,
+          0,
+          "white",   // color
+          0.005, // headLength
+          0.005, // headWidth
+        ]}
+      />
+      {/*<Billboard>*/}
+      <Text
+        position={[0.0, 0.008, -0.0035]}
+        fontSize={0.0055}
+        color="white"
+        anchorX="center"
+        anchorY="middle" 
+        rotation={[-Math.PI / 2, 0, Math.PI]}
+      >
+        CURRENT
+      </Text>         
+      {/*</Billboard>*/}
+    </group>
+  );
+}
 function CoilMesh({ coilRadiusM, coilLengthM, turns }: { coilRadiusM: number; coilLengthM: number; turns: number; }) {
   const points = useMemo(() => {
     const pts: THREE.Vector3[] = [];
@@ -54,12 +137,14 @@ function FieldArrows({
   turns,
   current,
   onHoverField,
+  zoomLevel
 }: {
   coilRadiusM: number;
   coilLengthM: number;
   turns: number;
   current: number;
   onHoverField?: (pos: THREE.Vector3 | null, B?: number) => void;
+  zoomLevel: number;
 }) {
   const { coilPts, dl } = useMemo(() => {
     const pts: THREE.Vector3[] = [];
@@ -89,6 +174,13 @@ function FieldArrows({
 
   const arrows = useMemo(() => {
     const elements: React.JSX.Element[] = [];
+
+    // Normalize zoom value to [0, 1]
+    const t = (zoomLevel - minZoom) / (maxZoom - minZoom);
+    const clampT = Math.max(0, Math.min(1, t));
+    const gridExtent = lerp(minExtent, maxExtent, clampT);
+    const gridSpacingCm = lerp(minSpacing, maxSpacing, clampT);
+
     for (let xCm = -gridExtent; xCm <= gridExtent; xCm += gridSpacingCm) {
       for (let zCm = -gridExtent; zCm <= gridExtent; zCm += gridSpacingCm) {
         const x = xCm / 100;
@@ -149,11 +241,12 @@ export default function MagneticField() {
   const [coilLengthCm, setCoilLengthCm] = useState(5);
   const [coilRadiusCm, setCoilRadiusCm] = useState(1);
   const [turns, setTurns] = useState(10);
-  const [current, setCurrent] = useState(1);
+  const [current, setCurrent] = useState(0.5);
   const [hoveredField, setHoveredField] = useState<THREE.Vector3 | null>(null);
   const [hoveredB, setHoveredB] = useState<number | undefined>(undefined);
   const canvasRef = useRef<HTMLDivElement>(null);
   const [screenPos, setScreenPos] = useState<{ left: number; top: number } | null>(null);
+  const [zoom, setZoom] = useState(1);
 
   return (
     <>
@@ -242,8 +335,11 @@ export default function MagneticField() {
                   setScreenPos(null);
                 }
               }}
+              zoomLevel={zoom}
             />
             <OrbitControls />
+            <CameraTracker setZoom={setZoom} />
+            <CurrentArrow3D coilLengthM={coilLengthCm / 100}/>
           </Canvas>
           {/* Tooltip for |B| */}
           {hoveredField && hoveredB !== undefined && (
@@ -267,42 +363,11 @@ export default function MagneticField() {
             >
               |B| = {hoveredB.toExponential(3)} T
             </div>
-          )}
-          <div
-            style={{
-              position: "absolute",
-              left: "50%",
-              bottom: 12,
-              transform: "translateX(-50%)",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              pointerEvents: "none",
-              width: 220,
-              zIndex: 20,
-            }}
-          >
-            <svg width="220" height="36" style={{ display: "block" }}>
-              <line x1="150" y1="18" x2="80" y2="18" stroke="#888" strokeWidth="5" strokeLinecap="round" />
-              <polygon points="80,8 50,18 80,28" fill="#888" />
-            </svg>
-            <span
-              style={{
-                color: "#888",
-                fontWeight: 400,
-                fontSize: 18,
-                letterSpacing: 3,
-                fontFamily: "sans-serif",
-                marginTop: 1
-              }}
-            >
-              CURRENT
-            </span>
-          </div>
+          )}          
         </div>
-      <div className={styles.descriptionScroll}>
-        <b>What you're seeing:</b> The magnetic field lines inside and outside a solenoid. Use the sliders above to change the coil length, radius, number of turns, and current. Hover over the arrows to see the field strength at different points.
-      </div>
+        <div className={styles.descriptionScroll}>
+          <b>What you're seeing:</b> The magnetic field lines inside and outside a solenoid. Use the sliders above to change the coil length, radius, number of turns, and current. Hover over the arrows to see the field strength at different points.
+        </div>
       </div>
     </>
   );
