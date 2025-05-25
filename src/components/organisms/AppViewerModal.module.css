@@ -27,7 +27,7 @@
 @media (min-width: 600px) {
   .modal {
     max-width: 80%;
-    height: 80%;
+    max-height: 90%;
   }
 }
 
