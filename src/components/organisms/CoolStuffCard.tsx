@@ -12,7 +12,7 @@ export default function CoolStuffCard() {
 
   return (
     <>
-      <Card title="Cool Stuff">
+      <Card title="My Projects">
         <ul className={styles.list}>
           <li>
             <button

@@ -365,7 +365,11 @@ export default function MagneticField() {
           )}          
         </div>
         <div className={styles.descriptionScroll}>
-          <b>What you're seeing:</b> The magnetic field lines inside and outside a solenoid. Use the sliders above to change the coil length, radius, number of turns, and current. Hover over the arrows to see the field strength at different points.
+          This interactive diagram shows how a magnetic field forms around a coil of wire. 
+          Use the sliders above to change the coil length, radius, number of turns, and current. 
+          Hover over or tap the arrows to see the field strength |<b>B</b>| at different points. 
+          The equation to calculate the magnetic field at each point is the Bio-Savart law, 
+          formulated in 1820 by Jean-Baptiste Biot and Félix Savart. 
         </div>
       </div>
     </>
