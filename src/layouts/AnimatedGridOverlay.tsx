@@ -1,46 +1,54 @@
 import React, { useEffect, useRef } from "react";
 
-export default function AnimatedGridOverlay() {
-  const canvasRef = useRef<HTMLDivElement>(null);
+interface AnimatedGridOverlayProps {
+  containerRef: React.RefObject<HTMLDivElement | null>;
+}
 
+const AnimatedGridOverlay: React.FC<AnimatedGridOverlayProps> = ({ containerRef }) => {
+  const canvasHolderRef = useRef<HTMLDivElement>(null);
+  const p5InstanceRef   = useRef<any>(null);
+
+  /* ------------- p5 bootstrap ------------- */
   useEffect(() => {
-    let p5Instance: any;
-
     const sketch = (p: any) => {
       const gridSpacing = 48;
-      const nodeSize = 1;
+      const nodeSize    = 1;
+
+      const getSize = () => {
+        const width  = window.innerWidth;
+        const height =
+          containerRef.current?.getBoundingClientRect().height ?? window.innerHeight;
+        return { width, height };
+      };
 
       p.setup = () => {
-        p.createCanvas(window.innerWidth, window.innerHeight).parent(canvasRef.current);
-        p.noFill();
+        const { width, height } = getSize();
+        p.createCanvas(width, height).parent(canvasHolderRef.current);
         p.frameRate(60);
       };
 
-      p.windowResized = () => {
-        p.resizeCanvas(window.innerWidth, window.innerHeight);
-      };
+      /* ✨ we do **not** define p.windowResized – that keeps the Zod‑spam away */
 
       p.draw = () => {
         p.clear();
-        p.stroke(255, 255, 255, 18);
-        for (let x = 0; x <= p.width; x += gridSpacing) {
-          p.line(x, 0, x, p.height);
-        }
-        for (let y = 0; y <= p.height; y += gridSpacing) {
-          p.line(0, y, p.width, y);
-        }
 
-        let t = p.millis() / 1500.0;
+        /* faint grid lines */
+        p.stroke(255, 255, 255, 18);
+        for (let x = 0; x <= p.width; x += gridSpacing) p.line(x, 0, x, p.height);
+        for (let y = 0; y <= p.height; y += gridSpacing) p.line(0, y, p.width, y);
+
+        /* gentle sparkles */
+        const t = p.millis() / 1500.0;
         for (let x = 0; x <= p.width; x += gridSpacing) {
           for (let y = 0; y <= p.height; y += gridSpacing) {
-            let base = t + (x + y) / 500;
-            let swirl = t * 0.8 + p.dist(x, y, p.width/2, p.height/2) / 140;
-            let ripple = t * 1.7 + x / 120 - y / 160;
-            let sparkle = (
-                0.40 * Math.sin(base) +
-                0.25 * Math.sin(swirl) +
-                0.20 * Math.sin(ripple)
-            );
+            const base   = t + (x + y) / 500;
+            const swirl  = t * 0.8 + p.dist(x, y, p.width / 2, p.height / 2) / 140;
+            const ripple = t * 1.7 + x / 120 - y / 160;
+
+            let sparkle = 0.4 * Math.sin(base)
+                        + 0.25 * Math.sin(swirl)
+                        + 0.20 * Math.sin(ripple);
+
             sparkle = p.constrain(sparkle, -1, 1);
             sparkle = p.map(sparkle, -1, 1, 0.12, 0.7);
 
@@ -52,27 +60,45 @@ export default function AnimatedGridOverlay() {
       };
     };
 
-    import("p5").then((p5) => {
-      p5Instance = new p5.default(sketch);
+    import("p5").then(({ default: P5 }) => {
+      p5InstanceRef.current = new P5(sketch);
     });
 
-    return () => {
-      if (p5Instance) p5Instance.remove();
-    };
-  }, []);
+    return () => p5InstanceRef.current?.remove();
+  }, [containerRef]);
+  /* ---------------------------------------- */
 
-  // Give this a CSS class if you want, or inline styles
+  /* ------------- ResizeObserver ------------ */
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    const ro = new ResizeObserver(() => {
+      const inst = p5InstanceRef.current;
+      if (!inst) return;
+      const width  = window.innerWidth;
+      const height = containerRef.current!.getBoundingClientRect().height;
+      inst.resizeCanvas(width, height);      // no p.windowResized call -> no Zod errors
+    });
+
+    ro.observe(containerRef.current);
+    return () => ro.disconnect();
+  }, [containerRef]);
+  /* ---------------------------------------- */
+
   return (
     <div
-      ref={canvasRef}
+      ref={canvasHolderRef}
       style={{
         position: "absolute",
         inset: 0,
         width: "100vw",
-        height: "100vh",
+        height: "100%",
         pointerEvents: "none",
         zIndex: 1,
+        overflow: "hidden",
       }}
     />
   );
-}
+};
+
+export default AnimatedGridOverlay;
