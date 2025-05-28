@@ -1,6 +1,7 @@
 /* src/pages/ResumePage.module.css */
 
 .container {
+  position: relative;                 /* ← needed for overlay */
   display: grid;
   /* mobile: stack everything */
   grid-template-columns: 1fr;
