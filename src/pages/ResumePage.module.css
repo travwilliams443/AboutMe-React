@@ -1,12 +1,12 @@
+/* ResumePage.module.css */
 .container {
+  position: relative;                 /* ← needed for overlay */
   display: grid;
   grid-template-columns: 1fr;
   width: 100vw;
-  /*min-height: 100vh;*/
-  margin: 0;
-  padding: 0;
   background: linear-gradient(135deg, #639edb 0%, #d7eaff 100%);
 }
+
 
 @media (min-width: 768px) {
   .container {
