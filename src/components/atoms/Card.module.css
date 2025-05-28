@@ -15,13 +15,13 @@
 /* Hover state */
 .card:hover {
   /* a bit more opaque so it “fills in” */
-  background: rgba(255, 255, 255, 0.521);
+  background: rgba(255, 255, 255, 0.48);
 
   /* soft drop shadow to lift it off the page */
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 
   /* tiny lift for a material‑like effect */
-  transform: translateY(-3px);
+  transform: translateY(-1px);
 }
 
 /* heading styling stays the same */
