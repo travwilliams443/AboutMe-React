@@ -7,7 +7,7 @@ export default function EducationSection() {
     <Card title="Education">
       <article className={styles.item}>
         <h3 className={styles.degree}>
-          Associate of Applied Science in Mechatronics (Expected Dec 2026)<br />
+          Associate of Applied Science in Mechatronics (Expected Aug 2026)<br />
           <span className={styles.institution}>Gwinnett Technical College</span>
         </h3>
         <p className={styles.dates}>Lawrenceville, GA</p>
