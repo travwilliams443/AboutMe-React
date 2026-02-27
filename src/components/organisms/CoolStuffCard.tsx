@@ -2,13 +2,14 @@ import React, { useState } from "react";
 import Card from "../atoms/Card";
 import LorenzAttractor from "./LorenzAttractor"; 
 import MagneticField from "./MagneticField";
+import BJTLoadLine from "./BJTLoadLine";
 import AppViewerModal from "./AppViewerModal";
 import styles from "./CoolStuffCard.module.css";
 
 export default function CoolStuffCard() {
-  const [openOld, setOpenOld] = useState(false);
   const [openLorenzR3F, setOpenLorenzR3F] = useState(false);
   const [openMagneticField, setOpenMagneticField] = useState(false);
+  const [openBjtLoadLine, setOpenBjtLoadLine] = useState(false);
 
   return (
     <>
@@ -30,6 +31,14 @@ export default function CoolStuffCard() {
               Magnetic Field Simulator
             </button>
           </li>
+          <li>
+            <button
+              onClick={() => setOpenBjtLoadLine(true)}
+              className={styles.sendButton}
+            >
+              BJT Load Line
+            </button>
+          </li>
         </ul>
       </Card>
 
@@ -49,6 +58,14 @@ export default function CoolStuffCard() {
         title="Magnetic Field Simulator"
       >
         <MagneticField />
+      </AppViewerModal>
+
+      <AppViewerModal
+        isOpen={openBjtLoadLine}
+        onClose={() => setOpenBjtLoadLine(false)}
+        title="BJT Load Line Explorer"
+      >
+        <BJTLoadLine />
       </AppViewerModal>
     </>
   );
