@@ -140,7 +140,7 @@ export default function BJTCarrierDemo() {
       const baseX = centerX - baseWidth / 2;
       const collectorY = centerY - bodyRadius + 10;
       const emitterY = centerY + bodyRadius - 10;
-      const fieldDirection = transistorType === "NPN" ? -1 : 1;
+      const flowDirection = -1;
       const baseColor = transistorType === "NPN" ? "rgba(124, 45, 18, 0.34)" : "rgba(22, 78, 99, 0.34)";
       const carrierColor = transistorType === "NPN" ? "#7dd3fc" : "#fda4af";
       const carrierFill = transistorType === "NPN" ? "rgba(125, 211, 252, 0.9)" : "rgba(253, 164, 175, 0.9)";
@@ -150,12 +150,12 @@ export default function BJTCarrierDemo() {
           ? lerp(0, 3, injectionRate)
           : operatingMode === "Saturation"
             ? lerp(18, 82, injectionRate)
-            : lerp(4, 68, injectionRate);
+            : lerp(2, 34, injectionRate);
       const captureLine = centerY - 92;
       const saturationCaptureLine = centerY - 24;
       const baseMid = centerY;
       const basePulseRate = lerp(1, 8, baseDrive / 100);
-      const injectionDirection = transistorType === "NPN" ? -1 : 1;
+      const injectionDirection = -1;
       const zeroField = normalizedField < 0.01;
       const effectiveCapture =
         operatingMode === "Saturation"
@@ -163,7 +163,7 @@ export default function BJTCarrierDemo() {
           : collectorCapture;
       const collectorStreamCount =
         operatingMode === "Saturation" && !zeroField
-          ? Math.max(4, Math.round(lerp(4, 10, Math.max(normalizedField, 0.25))))
+          ? Math.max(2, Math.round(lerp(2, 10, normalizedField)))
           : 0;
 
       const particles = particlesRef.current;
@@ -173,7 +173,7 @@ export default function BJTCarrierDemo() {
       while (spawnRemainderRef.current >= 1 && particles.length < 240) {
         particles.push({
           x: baseX + lerp(24, baseWidth - 4, Math.random()),
-          y: transistorType === "NPN" ? emitterY + 6 : collectorY - 6,
+          y: emitterY + 6,
           vx: lerp(58, 112, Math.random()),
           drift: lerp(18, 72, Math.random()),
           radius: 6,
@@ -253,21 +253,22 @@ export default function BJTCarrierDemo() {
             ? Math.sin(now / 150 + particle.phase) * 18 * (0.2 + particle.crowding)
             : 0;
 
-        particle.x += Math.sin(now / 180 + particle.phase) * particle.drift * dt * (inBase ? 0.18 : 0.1);
+          particle.x += Math.sin(now / 180 + particle.phase) * particle.drift * dt * (inBase ? 0.18 : 0.1);
 
         if (particle.state === "collector") {
           particle.dwell = 0;
           particle.vx += 110 * normalizedField * dt;
-          particle.y += fieldDirection * particle.vx * dt * baseMotion + crowdingOffset * dt;
+          particle.y += flowDirection * particle.vx * dt * baseMotion + crowdingOffset * dt;
         } else if (particle.state === "injecting") {
           particle.dwell = 0;
           const entrySpeed =
             operatingMode === "Cutoff"
               ? lerp(14, 32, injectionRate)
+              : operatingMode === "Active"
+                ? lerp(34, 78, injectionRate)
               : lerp(52, 118, injectionRate);
           particle.y += injectionDirection * entrySpeed * dt;
-          const hitBase =
-            transistorType === "NPN" ? particle.y <= centerY + 86 : particle.y >= centerY - 86;
+          const hitBase = particle.y <= centerY + 86;
           if (hitBase) {
             particle.state = "base";
             particle.vx =
@@ -283,9 +284,9 @@ export default function BJTCarrierDemo() {
             ? 0
             : operatingMode === "Saturation"
               ? lerp(54, 140, Math.max(normalizedField, 0.2)) * (0.7 + particle.crowding * 0.25)
-              : lerp(160, 320, normalizedField);
+              : lerp(130, 260, Math.max(normalizedField, 0.12)) * lerp(0.6, 1, injectionRate);
           particle.vx = transitSpeed;
-          particle.y += fieldDirection * particle.vx * dt + crowdingOffset * dt;
+          particle.y += flowDirection * particle.vx * dt + crowdingOffset * dt;
           if (zeroField) {
             particle.x += Math.sin(now / 120 + particle.phase) * particle.drift * dt * 0.3;
           }
@@ -296,10 +297,7 @@ export default function BJTCarrierDemo() {
 
         const activeCaptureEdge =
           operatingMode === "Saturation" ? saturationCaptureLine : captureLine;
-        const reachedCaptureZone =
-          transistorType === "NPN"
-            ? particle.y <= activeCaptureEdge
-            : particle.y >= canvasHeight - activeCaptureEdge;
+        const reachedCaptureZone = particle.y <= activeCaptureEdge;
 
         if (inBase && Math.random() < recombinationFraction * dt * 3.8) {
           flashes.push({ x: particle.x, y: particle.y, life: 0.18, maxLife: 0.18 });
@@ -326,18 +324,17 @@ export default function BJTCarrierDemo() {
             particle.state = "collector";
             particle.vx =
               operatingMode === "Saturation"
-                ? lerp(220, 360, Math.max(normalizedField, 0.25))
-                : lerp(120, 320, normalizedField);
+                ? lerp(90, 300, normalizedField)
+                : lerp(140, 260, Math.max(normalizedField, 0.12)) * lerp(0.7, 1, injectionRate);
             particle.dwell = 0;
             particle.x += Math.sin(particle.phase) * 10;
           } else if (operatingMode === "Saturation") {
             particle.state = "base";
-            particle.y += fieldDirection * -28 * dt;
+            particle.y += flowDirection * -28 * dt;
           }
         }
 
-        if (transistorType === "NPN" && particle.y < -24) return false;
-        if (transistorType === "PNP" && particle.y > canvasHeight + 24) return false;
+        if (particle.y < -24 || particle.y > canvasHeight + 24) return false;
         if (particle.age > 4.5) return false;
         return true;
       });
@@ -371,7 +368,7 @@ export default function BJTCarrierDemo() {
 
       if (collectorStreamCount > 0) {
         for (let i = 0; i < collectorStreamCount; i += 1) {
-          const phase = now / 120 + i * 0.7;
+          const phase = now / lerp(260, 110, normalizedField) + i * 0.7;
           const t = (phase % 1 + 1) % 1;
           const streamY = lerp(centerY - 10, collectorY - 10, t);
           const streamX = centerX + Math.sin(now / 220 + i) * 10;

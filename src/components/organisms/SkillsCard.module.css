@@ -1,8 +1,28 @@
-.list {
+.grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0.25rem 1.25rem;  /* vertical and horizontal spacing */
-  list-style: none;
-  padding: 0;
+  gap: 1rem 1.25rem;
+}
+
+.group {
+  min-width: 0;
+}
+
+.heading {
+  margin: 0 0 0.35rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.items {
   margin: 0;
+  color: #334155;
+  line-height: 1.6;
+}
+
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
 }
