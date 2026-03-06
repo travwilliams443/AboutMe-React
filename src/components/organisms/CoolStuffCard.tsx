@@ -3,6 +3,7 @@ import Card from "../atoms/Card";
 import LorenzAttractor from "./LorenzAttractor"; 
 import MagneticField from "./MagneticField";
 import BJTLoadLine from "./BJTLoadLine";
+import BJTCarrierDemo from "./BJTCarrierDemo";
 import AppViewerModal from "./AppViewerModal";
 import styles from "./CoolStuffCard.module.css";
 
@@ -10,6 +11,7 @@ export default function CoolStuffCard() {
   const [openLorenzR3F, setOpenLorenzR3F] = useState(false);
   const [openMagneticField, setOpenMagneticField] = useState(false);
   const [openBjtLoadLine, setOpenBjtLoadLine] = useState(false);
+  const [openBjtCarrierDemo, setOpenBjtCarrierDemo] = useState(false);
 
   return (
     <>
@@ -39,6 +41,14 @@ export default function CoolStuffCard() {
               BJT Load Line
             </button>
           </li>
+          <li>
+            <button
+              onClick={() => setOpenBjtCarrierDemo(true)}
+              className={styles.sendButton}
+            >
+              BJT Carrier Demo
+            </button>
+          </li>
         </ul>
       </Card>
 
@@ -66,6 +76,14 @@ export default function CoolStuffCard() {
         title="BJT Load Line Explorer"
       >
         <BJTLoadLine />
+      </AppViewerModal>
+
+      <AppViewerModal
+        isOpen={openBjtCarrierDemo}
+        onClose={() => setOpenBjtCarrierDemo(false)}
+        title="BJT Carrier Flow Demo"
+      >
+        <BJTCarrierDemo />
       </AppViewerModal>
     </>
   );

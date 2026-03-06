@@ -1,0 +1,146 @@
+.shell {
+  color: #dbe7f3;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(240px, 300px);
+  gap: 1rem;
+  align-items: start;
+}
+
+.panel {
+  background:
+    radial-gradient(circle at top, rgba(96, 165, 250, 0.12), transparent 42%),
+    linear-gradient(180deg, #0f172a 0%, #111827 100%);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 18px;
+  padding: 1rem;
+  box-shadow: 0 20px 50px rgba(2, 6, 23, 0.35);
+}
+
+.panelHeader {
+  margin-bottom: 1rem;
+}
+
+.panelHeader h2 {
+  margin: 0;
+  font-size: 1rem;
+  color: #f8fafc;
+}
+
+.panelHeader p {
+  margin: 0.35rem 0 0;
+  font-size: 0.86rem;
+  color: #94a3b8;
+}
+
+.segmented {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(72px, 1fr));
+  gap: 0.55rem;
+  margin-bottom: 0.9rem;
+  width: 100%;
+  min-width: 0;
+}
+
+.segment,
+.segmentActive {
+  border: 1px solid rgba(125, 211, 252, 0.25);
+  border-radius: 999px;
+  padding: 0.55rem 0.75rem;
+  background: rgba(15, 23, 42, 0.82);
+  color: #dbe7f3;
+}
+
+.segmentActive {
+  background: linear-gradient(135deg, #0ea5e9, #2563eb);
+  border-color: transparent;
+  color: #eff6ff;
+}
+
+.modeIndicator {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  min-width: 0;
+  padding: 0.7rem 1.35rem 0.7rem 0.9rem;
+  border-radius: 16px;
+  border: 1px solid rgba(250, 204, 21, 0.22);
+  background: linear-gradient(135deg, rgba(234, 179, 8, 0.18), rgba(59, 130, 246, 0.12));
+  gap: 1.5rem;
+  overflow: hidden;
+}
+
+.modeLabel {
+  font-size: 0.8rem;
+  color: #cbd5e1;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.modeValue {
+  color: #fef3c7;
+  font-size: 0.95rem;
+  flex: 0 0 auto;
+}
+
+.control {
+  display: block;
+  margin-bottom: 0.85rem;
+}
+
+.control input[type="range"] {
+  width: 100%;
+  margin-top: 0.45rem;
+  accent-color: #38bdf8;
+  touch-action: none;
+  cursor: ew-resize;
+}
+
+.controlHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.88rem;
+}
+
+.controlHeader strong {
+  color: #f8fafc;
+  font-weight: 600;
+}
+
+.visualPanel {
+  overflow: hidden;
+}
+
+.canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: #08131f;
+}
+
+.captionRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+  font-size: 0.78rem;
+  color: #94a3b8;
+}
+
+@media (max-width: 1120px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .captionRow {
+    flex-wrap: wrap;
+  }
+}
