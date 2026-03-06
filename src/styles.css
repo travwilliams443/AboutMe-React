@@ -1,0 +1,266 @@
+:root {
+  font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+  color: #143338;
+  background: linear-gradient(140deg, #f5fbfa 0%, #eef4fb 100%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.app-shell {
+  min-height: 100vh;
+  padding: 1rem;
+}
+
+.top-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.tab-button {
+  border: 1px solid #87a0bf;
+  background: #f8fbff;
+  color: #1e3440;
+  border-radius: 999px;
+  padding: 0.45rem 0.9rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.tab-button.active {
+  background: #1a7f72;
+  border-color: #0c5f55;
+  color: #fff;
+}
+
+.main-content {
+  display: block;
+}
+
+.demo-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(300px, 1fr);
+  gap: 1rem;
+}
+
+.visual-panel,
+.math-panel,
+.placeholder-card {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #d4e0ee;
+  border-radius: 14px;
+  padding: 1rem;
+}
+
+.circle-card {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #d6e1ed;
+}
+
+.airliner-card {
+  margin-top: 0.7rem;
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #d6e1ed;
+}
+
+.circle-svg {
+  width: 100%;
+  max-height: 460px;
+  display: block;
+}
+
+.metrics-overlay {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 0.35rem;
+  padding: 0.65rem 0.75rem;
+  background: #f3f8fe;
+  border-top: 1px solid #d6e1ed;
+  font-weight: 600;
+}
+
+.metrics-overlay .katex {
+  font-size: 1.02rem;
+}
+
+.controls-card {
+  margin-top: 0.8rem;
+  border: 1px solid #d6e1ed;
+  border-radius: 10px;
+  padding: 0.75rem;
+  background: #fdfefe;
+  display: grid;
+  gap: 0.65rem;
+}
+
+.controls-row {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.controls-row button,
+.speed-group button {
+  border: 1px solid #98aec5;
+  border-radius: 8px;
+  background: #fff;
+  padding: 0.35rem 0.6rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.speed-group {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.active-speed {
+  background: #1a7f72 !important;
+  color: white;
+  border-color: #1a7f72 !important;
+}
+
+.input-row {
+  display: grid;
+  grid-template-columns: 1fr 2fr 96px;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.input-row input[type="number"] {
+  width: 100%;
+  border: 1px solid #bac9d9;
+  border-radius: 8px;
+  padding: 0.25rem 0.4rem;
+}
+
+.toggle-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.focus-marker {
+  margin-top: 0.8rem;
+  border: 1px solid #f4c77f;
+  background: #fff5e7;
+  color: #6b4504;
+  border-radius: 8px;
+  padding: 0.55rem 0.65rem;
+  font-weight: 700;
+}
+
+.plot-card {
+  margin-top: 0.8rem;
+  border: 1px solid #d6e1ed;
+  border-radius: 10px;
+  padding: 0.75rem;
+  background: #fdfefe;
+}
+
+.plot-card h3 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+.plot-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.plot-label {
+  font-size: 12px;
+  fill: #2f4558;
+}
+
+.plot-axis-label {
+  font-size: 11px;
+  fill: #5f7385;
+}
+
+.katex-svg-label {
+  color: #5f7385;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.katex-svg-label .katex {
+  font-size: 1em;
+}
+
+.explain-box {
+  margin-top: 0.8rem;
+  border: 1px solid #d6e1ed;
+  border-radius: 10px;
+  padding: 0.7rem;
+  background: #fbfcff;
+}
+
+.explain-box ul {
+  margin-bottom: 0;
+}
+
+.math-panel h2 {
+  margin-top: 0;
+}
+
+.math-section {
+  border-top: 1px solid #e1e8f0;
+  padding-top: 0.65rem;
+  margin-top: 0.65rem;
+}
+
+.math-section h3 {
+  margin: 0 0 0.25rem;
+  font-size: 1rem;
+}
+
+.math-section p {
+  margin: 0.2rem 0;
+}
+
+.math-section .katex-display {
+  margin: 0.45rem 0;
+}
+
+.math-section .katex {
+  font-size: 1.08rem;
+}
+
+.controls-card .katex,
+.plot-card .katex,
+.explain-box .katex {
+  font-size: 1em;
+}
+
+.placeholder-card h2 {
+  margin-top: 0;
+}
+
+@media (max-width: 980px) {
+  .demo-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .input-row {
+    grid-template-columns: 1fr;
+  }
+}

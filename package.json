@@ -1,33 +1,20 @@
 {
-  "name": "aboutme-react",
+  "name": "math-demos",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
-    "@formspree/react": "^3.0.0",
-    "@react-three/drei": "^10.0.8",
-    "@react-three/fiber": "^9.1.2",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
-    "three": "^0.176.0"
+    "katex": "^0.16.22",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "@eslint/js": "^9.25.0",
-    "@types/react": "^19.1.4",
-    "@types/react-dom": "^19.1.5",
-    "@types/three": "^0.176.0",
-    "@vitejs/plugin-react": "^4.4.1",
-    "eslint": "^9.25.0",
-    "eslint-plugin-react-hooks": "^5.2.0",
-    "eslint-plugin-react-refresh": "^0.4.19",
-    "globals": "^16.0.0",
-    "typescript": "^5.8.3",
-    "vite": "^6.3.5"
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^5.4.11"
   }
 }
