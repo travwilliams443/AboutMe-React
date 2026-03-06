@@ -59,38 +59,16 @@
   color: #eff6ff;
 }
 
-.modeIndicator {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-  min-width: 0;
-  padding: 0.7rem 1.35rem 0.7rem 0.9rem;
-  border-radius: 16px;
-  border: 1px solid rgba(250, 204, 21, 0.22);
-  background: linear-gradient(135deg, rgba(234, 179, 8, 0.18), rgba(59, 130, 246, 0.12));
-  gap: 1.5rem;
-  overflow: hidden;
-}
-
-.modeLabel {
-  font-size: 0.8rem;
-  color: #cbd5e1;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-
-.modeValue {
-  color: #fef3c7;
-  font-size: 0.95rem;
-  flex: 0 0 auto;
-}
-
 .control {
   display: block;
   margin-bottom: 0.85rem;
+}
+
+.selectorRow {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+  margin-top: 1rem;
 }
 
 .control input[type="range"] {

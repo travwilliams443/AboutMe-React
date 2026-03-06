@@ -37,7 +37,7 @@ interface SliderProps {
 const CANVAS_WIDTH = 920;
 const CANVAS_HEIGHT = 360;
 const MOBILE_CANVAS_WIDTH = 420;
-const MOBILE_CANVAS_HEIGHT = 520;
+const MOBILE_CANVAS_HEIGHT = 420;
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
@@ -140,8 +140,6 @@ export default function BJTCarrierDemo() {
       const baseX = centerX - baseWidth / 2;
       const collectorY = centerY - bodyRadius + 10;
       const emitterY = centerY + bodyRadius - 10;
-      const collectorBandHeight = 120;
-      const emitterBandHeight = 120;
       const fieldDirection = transistorType === "NPN" ? -1 : 1;
       const baseColor = transistorType === "NPN" ? "rgba(124, 45, 18, 0.34)" : "rgba(22, 78, 99, 0.34)";
       const carrierColor = transistorType === "NPN" ? "#7dd3fc" : "#fda4af";
@@ -203,12 +201,8 @@ export default function BJTCarrierDemo() {
       ctx.lineWidth = 4;
       ctx.stroke();
 
-      ctx.fillStyle = transistorType === "NPN" ? "rgba(14, 116, 144, 0.28)" : "rgba(190, 24, 93, 0.25)";
-      ctx.fillRect(centerX - 112, collectorY - collectorBandHeight / 2, 224, collectorBandHeight);
       ctx.fillStyle = baseColor;
       ctx.fillRect(baseX, centerY - 96, baseWidth, 192);
-      ctx.fillStyle = transistorType === "NPN" ? "rgba(8, 145, 178, 0.24)" : "rgba(225, 29, 72, 0.22)";
-      ctx.fillRect(centerX - 112, emitterY - emitterBandHeight / 2, 224, emitterBandHeight);
 
       if (operatingMode === "Active") {
         ctx.fillStyle = "rgba(56, 189, 248, 0.16)";
@@ -448,31 +442,6 @@ export default function BJTCarrierDemo() {
         </div>
 
         <div className={styles.panel}>
-          <div className={styles.panelHeader}>
-            <h2>Controls</h2>
-            <p>Conceptual carrier-flow model, not full semiconductor physics.</p>
-          </div>
-
-          <div className={styles.segmented}>
-            {(["NPN", "PNP"] as TransistorType[]).map((option) => (
-              <button
-                key={option}
-                type="button"
-                className={option === transistorType ? styles.segmentActive : styles.segment}
-                onClick={() => setTransistorType(option)}
-              >
-                {option}
-              </button>
-            ))}
-          </div>
-
-          <div className={styles.segmented}>
-            <div className={styles.modeIndicator}>
-              <span className={styles.modeLabel}>Region</span>
-              <strong className={styles.modeValue}>{operatingMode}</strong>
-            </div>
-          </div>
-
           <Slider
             label="Base drive"
             valueLabel={`${baseDrive}`}
@@ -497,6 +466,19 @@ export default function BJTCarrierDemo() {
             value={collectorField}
             onChange={setCollectorField}
           />
+
+          <div className={styles.selectorRow}>
+            {(["NPN", "PNP"] as TransistorType[]).map((option) => (
+              <button
+                key={option}
+                type="button"
+                className={option === transistorType ? styles.segmentActive : styles.segment}
+                onClick={() => setTransistorType(option)}
+              >
+                {option}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     </section>
